@@ -1,4 +1,4 @@
-name: Deploy to EC2
+name: Deploy Node App to EC2
 
 on:
   push:
@@ -9,31 +9,15 @@ jobs:
   deploy:
     name: Build and Deploy
     runs-on: ubuntu-latest
-    env:
-      EC2_HOST: "ec2-16-171-231-5.eu-north-1.compute.amazonaws.com"        
-      EC2_USER: "ubuntu"       
-      EC2_APP_PATH: "/home/ubuntu/simple-node-app/" 
 
     steps:
-      - name: Checkoutt Code
-        uses: actions/checkout@v3
-
-      - name: Install Dependencie
-        run: npm install
-
-
-      - name: SSH into EC2 instace and Deployy
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ env.EC2_HOST }}
-          username: ${{ env.EC2_USER }}
-          key: ${{ secrets.AWS_EC }}
-          timeout: 60s
-          port: 22
-          script: |
-            set -e
-            echo "Pulling latest changes on EC2"
-            cd ${{ env.EC2_APP_PATH }}
-            npm install 
-            echo "Restarting application"
-            pm2 restart app || pm2 start index.js --name app
+    - name: Deploy via SSH
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ubuntu
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          cd /var/www/node-app-3
+          npm install
+          pm2 restart contacts-app || pm2 start index.js --name contacts-app
