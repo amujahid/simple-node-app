@@ -5,11 +5,15 @@ require('dotenv').config();
 const app = express();
 
 
+const waitUntil = Date.now() + 1000;
+while (Date.now() < waitUntil);
+
 const db = mysql.createConnection({
-  host: process.env.DB_HOST, 
-  user:process.env.DB_USER, 
+  host: process.env.DB_HOST,       // Kubernetes Service name for MySQL
+  user: process.env.DB_USER,       // from secret/config
   password: process.env.DB_PASSWORD, 
-  database: "contacts_app", 
+  database: process.env.DB_NAME || "contacts_app", 
+  port: 3306
 });
 
 db.connect((err) => {

@@ -1,0 +1,11 @@
+apiVersion: v1
+data:
+  MYSQL_DATABASE: contacts_app
+  MYSQL_USER: contactsapp
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2025-11-07T15:34:40Z"
+  name: db-config
+  namespace: default
+  resourceVersion: "5957"
+  uid: b575f0b0-0be9-44ff-b4f3-f862197859e6
